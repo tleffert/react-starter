@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import { Square } from './square/Square';
+import { Board } from './board/Board';
 
 const App: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ const App: React.FC = () => {
         <div>
           Hello world
         </div>
-        <Square owner="'X'"/>
+        <Board />
       </header>
     </div>
   );
