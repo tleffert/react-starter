@@ -14,17 +14,13 @@ export class Square extends Component<SquareProps, SquareProps> {
         this.state = {...props};
     }
 
-    handleClick = () => {
-        console.log("I got clicked", this.state.owner);
+    render() {
+        return (
+        <button className="square"
+            onClick={() => this.setState({owner: 'X'})}
+        >
+            <span>{this.state.owner}</span>
+        </button>
+        );
     }
-
-  render() {
-    return (
-      <button className="square"
-        onClick={this.handleClick}
-      >
-      I'm a button
-      </button>
-    );
-  }
 }
