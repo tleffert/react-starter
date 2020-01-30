@@ -9,9 +9,6 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <div>
-          Hello world
-        </div>
         <Board />
       </header>
     </div>
