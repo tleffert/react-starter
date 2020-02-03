@@ -9,15 +9,21 @@ export interface BoardState {
     turnNumber: number;
     // Current active player taking thier turn
     activePlayer: string;
+
+}
+
+export interface BoardProps {
+    // Length of edges to create square board
+    edgeLength: number;
 }
 
 // NOTE <Props, State>
-export class Board extends Component<{}, BoardState> {
+export class Board extends Component<BoardProps, BoardState> {
 
-    constructor(props: BoardState) {
+    constructor(props: BoardProps) {
         super(props);
         this.state = {
-            squares: new Array<string>(9).fill(null),
+            squares: new Array<string>(props.edgeLength * props.edgeLength).fill(null),
             turnNumber: 0,
             activePlayer: 'X'
         }
@@ -36,35 +42,49 @@ export class Board extends Component<{}, BoardState> {
         });
     }
 
-    renderSquare(pos: number) {
+    renderSquare(id: number) {
         return (
             <Square
-                owner={this.state.squares[pos]}
-                onClick={() => this.assignSquare(pos)}
+                owner={this.state.squares[id]}
+                onClick={() => this.assignSquare(id)}
             />
         );
     }
 
+    /**
+     * Returns a row of square elements numSquares long
+     * @param  {number} numSquares    Length of the row to render
+     * @param  {number} posMultiplier Helper to determine the position identifier for the square
+     * @return {[type]}               Row elements to be rendered
+     */
+    renderRow(numSquares: number, posMultiplier: number) {
+        let row = [];
+        for(let i = 0; i < numSquares; i++) {
+            row.push(
+                this.renderSquare(i + (posMultiplier * this.props.edgeLength))
+            );
+        }
+        return row;
+    }
+
   render() {
+    // Being a little lazy so I can just map values
+    let rowHelper = new Array<any>(this.props.edgeLength).fill(null);
+    let boardRows = rowHelper.map((_, index) => {
+        return (
+            <div className="board-row">
+                {this.renderRow(this.props.edgeLength, index)}
+            </div>
+        );
+    });
+
     return (
-      <div>
-        <div className="status">{this.state.activePlayer}'s turn!</div>
-        <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
+        <div>
+            <div className="status">{this.state.activePlayer}'s turn!</div>
+            <div className="board">
+                {boardRows}
+            </div>
         </div>
-        <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-        </div>
-      </div>
     );
   }
 }

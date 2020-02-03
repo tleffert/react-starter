@@ -9,7 +9,9 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <Board />
+        <Board
+            edgeLength={3}
+        />
       </header>
     </div>
   );
