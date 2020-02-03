@@ -54,17 +54,15 @@ export class Board extends Component<BoardProps, BoardState> {
     }
 
     private checkForPlayerWin(player: string): boolean {
-        // TODO Check  both diagonal
+        let win = false;
         for(let i = 0; i < this.props.edgeLength; i++) {
-            if(this.checkColWin(i, player)) {
-                return true;
+            if(this.checkColWin(i, player) || this.checkRowWin(i, player)) {
+                win = true;
             }
-
-            if(this.checkRowWin(i, player)) {
-                return true;
-            }
-
         }
+
+        win = win || this.checkTLBRDiagonal(player) || this.checkTRBLDiagonal(player);
+        return win;
     }
 
     /**
@@ -76,8 +74,7 @@ export class Board extends Component<BoardProps, BoardState> {
         for(let i = 0; i < this.props.edgeLength; i++) {
             score += this.checkSquareMatches(i + (row * this.props.edgeLength), player);
         }
-        // TODO make score to win dynamic
-        return score === 3;
+        return score === this.props.edgeLength;
     }
 
     /**
@@ -89,8 +86,25 @@ export class Board extends Component<BoardProps, BoardState> {
         for(let i = 0; i < this.props.edgeLength; i++) {
             score += this.checkSquareMatches(col + (i * this.props.edgeLength), player);
         }
-        // TODO make score to win dynamic
-        return score === 3;
+        return score === this.props.edgeLength;
+    }
+
+    private checkTLBRDiagonal(player: string) {
+        let score = 0;
+
+        for(let i = 0; i < this.props.edgeLength; i++) {
+            score += this.checkSquareMatches(i + (i * this.props.edgeLength), player);
+        }
+        return score === this.props.edgeLength;
+    }
+
+    private checkTRBLDiagonal(player: string) {
+        let score = 0;
+
+        for(let i = 0; i < this.props.edgeLength; i++) {
+            score += this.checkSquareMatches(((this.props.edgeLength - 1) - i ) + (i * this.props.edgeLength), player);
+        }
+        return score === this.props.edgeLength;
     }
 
     private checkSquareMatches(pos: number, owner: string) {
