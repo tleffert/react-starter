@@ -17,9 +17,11 @@ export class Square extends Component<SquareProps> {
     render() {
         return (
             <button className="square"
+                // Prevents the square to be chose if already selected
+                disabled={this.props.owner !== null}
                 onClick={() => { this.props.onClick()}}
             >
-                <span>{this.props.owner}</span>
+                <span className="assigned-player">{this.props.owner}</span>
             </button>
         );
     }
